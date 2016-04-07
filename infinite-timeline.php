@@ -170,8 +170,24 @@ class InfiniteTimeline {
 				if( wp_is_mobile() ){
 					$size = 'medium';
 				}
+				
+				$shortcode = '';
+				$post_tags = get_the_tags();
+				if ( $post_tags ) {
+				    foreach( $post_tags as $tag ) {
+						if ($tag->name == 'ifttt') {
+							$content = get_the_content();
+							$content = '<div>'.$content.'</div>';
+							$shortcode = do_shortcode($content);
+						}
+					}
+				}
 
 				$output .= '<div class="item' .$add_class .'"' .$add_style .'>';
+
+				if(!empty($shortcode)) {
+					$output .=  $shortcode;
+				}
 				$output .= '<a href="' .get_permalink() .'">';
 				$output .= get_the_post_thumbnail( $post->ID, $size );
 				$output .= '<div class="title">' .get_post_time( get_option( 'date_format' ) ) .'<br>' .$title .'</div>';
